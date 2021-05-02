@@ -1,13 +1,49 @@
-.bg {
-    background-color: #00BFFF;
-    font-size: 30px;
+.loginbox {
+    background-color: #01BFFF;
+    font-size: 17px;
 } 
 
+.bg {
+    background-color: #01BFFF;
+    font-size: 30px;
+}
+
+
 .user_field{
-      text-align: center;
-      margin: 0 auto;
+    margin: auto;
+    display: block
 }
 
 head {
     text-align: center;
 }
+
+/* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l*/
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+	table-layout: fixed;
+}
+
+.style_table thead {
+	display: table-header-group;
+}
+
+/*.styled-table th,*/
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
