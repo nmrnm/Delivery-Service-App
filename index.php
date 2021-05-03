@@ -6,18 +6,7 @@
     <div align="center"> <b style="font-size=30px;" align = "center">Delivery Service</b></div> 
     <br> <br> 
      <div class="box" align="center">
-    <form action="login.php" method="post">
-      Username: <br>
-      <input name = "username"type="text"/> <br>
-      Password:
-      <input name = "password" class="user_field" type="text"/> <br> <br> 
-      <input type="submit" value="Login">
-    </form>
-      <!-- <button id="loginType" type="button"
-        onclick = "myFunction()"
-        >Not a Customer? Click Here to Login as a Delivery Driver.</button>
-     </div> -->
-      <?php include('db_connection.php');?>
-    <!--   <script type = "text/javascript" src="index.js"></script> -->
+		<button id="customer" onclick="location.href='indexC.php'">Customer Login</button>
+		<button id="driver" onclick="location.href='indexD.php'">Driver Login</button>
     </body>
 </html>
