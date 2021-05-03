@@ -5,7 +5,7 @@
     <body class = "bg">
     <div align="center"> <b style="font-size=30px;" align = "center">Delivery Service</b></div> 
     <br> <br> 
-     <div class="loginbox" align="center">
+     <div class="box" align="center">
     <form action="login.php" method="post">
       Username: <br>
       <input name = "username"type="text"/> <br>
@@ -18,6 +18,6 @@
         >Not a Customer? Click Here to Login as a Delivery Driver.</button>
      </div> -->
       <?php include('db_connection.php');?>
-       <script tpye = "text/javascript" src="index.js"></script>
+    <!--   <script type = "text/javascript" src="index.js"></script> -->
     </body>
 </html>

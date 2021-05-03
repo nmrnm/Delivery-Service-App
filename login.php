@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="index.css">
     </head>
 
-	<body>
+	<body class = "bg">
 	<?php
     include('passwords.php');
     global $USERNAME;
@@ -33,11 +33,19 @@
            echo "<p> Invalid Login Information. Please hit back button on your browser
                to go back to the login screen. </p>";
        }else{
-            echo "Welcome $customer. ";
+            $query = "SELECT Name FROM Customer WHERE UserID = '$customer'";
+            $result = $conn->query($query) or die(mysqli_error());
+            $name = mysqli_fetch_assoc($result)['Name'];
+            echo "Welcome $name. ";
             echo "These are your orders: ";
+            /* this button will jump to the order page when clicked */
+            echo "<button id='customerOrder' type='button' style='align: right; position: absolute;
+            top: 5; right: 5;' >
+                    Create New Order
+                </button>";
             $sql = "SELECT * FROM MyOrder WHERE UserID = '$customer'";
             $result = $conn->query($sql) or die(mysql_error());
-            echo "<table class='styled-table'><tr>";
+            echo "<table class='styled-table box'><tr>";
             for($i = 0; $i < mysqli_num_fields($result); $i++) {
                     $field_info = mysqli_fetch_field($result);
                     echo "<th>$field_info->name</th>";
@@ -74,5 +82,10 @@
         echo "</table>";*/
     }
     ?> 
+    <script type = "text/javascript">
+      document.getElementById("customerOrder").onclick = function() {
+              location.href = "customerOrder.php";
+      }
+    </script>
 	</body>
 <html>
