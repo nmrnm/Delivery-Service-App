@@ -8,9 +8,9 @@
      <div class="loginbox" align="center">
     <form action="login.php" method="post">
       Username: <br>
-      <input id = "username" type="text"/> <br>
+      <input name = "username"type="text"/> <br>
       Password:
-      <input id = "password"class="user_field" type="text"/> <br> <br> 
+      <input name = "password" class="user_field" type="text"/> <br> <br> 
       <input type="submit" value="Login">
     </form>
       <!-- <button id="loginType" type="button"
