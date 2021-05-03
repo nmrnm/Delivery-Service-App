@@ -1,12 +1,12 @@
 <html>
     <head>
         <link rel="stylesheet" href="index.css">
-        <div class="header"> <b>Create New Customer Account</b></div>
+        <div class="header"> <b>Create New Driver Account</b></div>
     </head>
     <body class = "bg">
     <?php
     //define variables
-    $msg = $uname = $pswd = $name = $phone = $address = $city = $state = $uid = "";
+    $msg = $uname = $pswd = $name = $phone = $license = $state = $model = $year = $make = $did = "";
 
     include('passwords.php');
     global $USERNAME;
@@ -46,30 +46,41 @@
        	else
        		$phone = $_POST["phone"];
        		
-		if(empty($_POST["address"]))
-       		$address = "";
+		if(empty($_POST["license"]))
+       		$license = "";
        	else
-       		$address = $_POST["address"];
-       		
-		if(empty($_POST["city"]))
-       		$city = "";
-       	else
-       		$city = $_POST["city"];
+       		$license = $_POST["license"];
        		
 		if(empty($_POST["state"]))
        		$state = "";
        	else
        		$state = $_POST["state"];
+       		
+		if(empty($_POST["model"]))
+       		$model = "";
+       	else
+       		$model = $_POST["model"];
+       		
+		if(empty($_POST["year"]))
+       		$year = "";
+       	else
+       		$year = $_POST["year"];
+		
+		if(empty($_POST["make"]))
+       		$make = "";
+       	else
+       		$make = $_POST["make"];
 	
 		//Check for any blanks
 		if(empty($_POST["uname"]) || empty($_POST["pswd"])
 		|| empty($_POST["name"]) || empty($_POST["phone"])
-		|| empty($_POST["address"]) || empty($_POST["city"])
-		|| empty($_POST["state"]))
+		|| empty($_POST["license"]) || empty($_POST["state"])
+		|| empty($_POST["model"]) || empty($_POST["year"])
+		|| empty($_POST["make"]))
 			$msg = "Unable to create user; all fields are required";
 		else
 		{
-       		$sql = "SELECT COUNT(DISTINCT Username) AS count FROM Customer WHERE Username = '$uname'";
+       		$sql = "SELECT COUNT(DISTINCT Username) AS count FROM Delivery_Driver WHERE Username = '$uname'";
        		$result = $conn->query($sql) or die(mysqli_error());
        		$count = mysqli_fetch_assoc($result)['count'];
        		if($count > 0)
@@ -78,15 +89,15 @@
        		}
        		else
        		{
-       			$sql = "SELECT MAX(UserID) AS max FROM Customer";
+       			$sql = "SELECT MAX(DriverID) AS max FROM Delivery_Driver";
        			$result = $conn->query($sql) or die(mysqli_error());
-       			$uid = mysqli_fetch_assoc($result)['max'];
-       			$uid++;
-       			
-       			$sql = "INSERT INTO Customer VALUES('$uid','$pswd','$name','NULL','$phone','$address','$city','$state','$uname');";
+       			$did = mysqli_fetch_assoc($result)['max'];
+       			$did++;
+       		
+       			$sql = "INSERT INTO Delivery_Driver VALUES('$did','$pswd','$name','NULL','$phone','$license','$state','$model','$year','$make','$username');";
        			$result = $conn->query($sql) or die(mysqli_error());
        			
-       			header("Location: indexC.php");
+       			header("Location: indexD.php");
        		}
 		}
 	}
@@ -96,6 +107,7 @@
     
     <div align="left">
        	<form method="post">
+       		<span align="center" class="header">User Information</span><br><br>
        		Username: 
       		<input name = "uname" type="text" value="<?php echo $uname;?>"/> <br><br>
 			Password: 
@@ -103,13 +115,18 @@
       		Name: 
       		<input name = "name" type="text" value="<?php echo $name;?>"/> <br><br>
       		Phone Number: 
-      		<input name = "phone" type="text" value="<?php echo $phone;?>"/> <br><br>
-      		Address:
-      		<input name = "address" type="text" value="<?php echo $address;?>"/> <br><br>
-      		City:
-      		<input name = "city" type="text" value="<?php echo $city;?>"/> <br><br>
-      		State:
+      		<input name = "phone" type="text" value="<?php echo $phone;?>"/> <br><br><br><br>
+      		<span align="center" class="header">Car Information</span><br><br>
+      		License Number:
+      		<input name = "license" type="text" value="<?php echo $license;?>"/> <br><br>
+      		State Registered:
       		<input name = "state" type="text" value="<?php echo $state;?>"/> <br><br>
+      		Model:
+      		<input name = "model" type="text" value="<?php echo $model;?>"/> <br><br>
+      		Year:
+      		<input name = "year" type="text" value="<?php echo $year;?>"/> <br><br>
+      		Make:
+      		<input name = "make" type="text" value="<?php echo $make;?>"/> <br><br>
           	<br>
       		<input type="submit" name="selectType" value="Create Account" class="bigButton">
         </form>

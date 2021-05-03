@@ -11,7 +11,8 @@
 	</div>
 	<br>
 	<div class="box2" align="center">
-		<button class="bigButton" onclick="location.href='createUser.php'">Create New Account</button>
+		<button class="bigButton" onclick="location.href='createUser.php'">Create New Customer Account</button>
+		<button class="bigButton" onclick="location.href='createDriver.php'">Create New Driver Account</button>
 	</div>
     </body>
 </html>
