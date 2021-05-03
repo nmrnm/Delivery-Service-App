@@ -49,13 +49,31 @@ body {
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 	table-layout: fixed;
+    background-color: #FCFFDB;
+
+    border-radius: 25px;
 }
 
 .style_table thead {
 	display: table-header-group;
+    border-radius: 25px;
 }
 
-/*.styled-table th,*/
+.styled-table th{
+    padding: 12px 15px;
+    background-color: green;
+}
+
+table th:first-child{
+  border-radius:25px 0 0 0px;
+}
+
+table th:last-child{
+  border-radius:0 25px 0px 0;
+}
+
+
+
 .styled-table td {
     padding: 12px 15px;
 }
@@ -65,7 +83,7 @@ body {
     color: #009879;
 }
 
-table, th, td {
+td {
     border: 1px solid black;
 }
 

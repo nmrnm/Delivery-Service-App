@@ -45,7 +45,7 @@
                 </button>";
             $sql = "SELECT * FROM MyOrder WHERE UserID = '$customer'";
             $result = $conn->query($sql) or die(mysql_error());
-            echo "<table class='styled-table box'><tr>";
+            echo "<div align='center'><table class='styled-table box'><tr>";
             for($i = 0; $i < mysqli_num_fields($result); $i++) {
                     $field_info = mysqli_fetch_field($result);
                     echo "<th>$field_info->name</th>";
@@ -58,7 +58,7 @@
                 }
                 echo "</tr>";
             }
-            echo "</table>";
+            echo "</table></div>";
        }
 
         /*
