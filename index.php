@@ -1,12 +1,17 @@
 <html>
     <head>
         <link rel="stylesheet" href="index.css">
+        <div class="header"> <b>Delivery Service</b></div>
     </head>
     <body class = "bg">
-    <div align="center"> <b style="font-size=30px;" align = "center">Delivery Service</b></div> 
     <br> <br> 
      <div class="box" align="center">
-		<button id="customer" onclick="location.href='indexC.php'">Customer Login</button>
-		<button id="driver" onclick="location.href='indexD.php'">Driver Login</button>
+		<button class="bigButton" onclick="location.href='indexC.php'">Customer Login</button>
+		<button class="bigButton" onclick="location.href='indexD.php'">Driver Login</button>
+	</div>
+	<br>
+	<div class="box2" align="center">
+		<button class="bigButton" onclick="location.href='createUser.php'">Create New Account</button>
+	</div>
     </body>
 </html>

@@ -1,7 +1,18 @@
-.box {
-    background-color: #01BFFF;
-    font-size: 17px;
-} 
+.bigButton {
+	height: 70;
+	width: 200;
+	font-family: arial;
+	font-size: 20;
+	border: 5px solid black;
+}
+
+.box{
+/*background-color: #01BFFF;*/
+}
+
+.box2 {
+
+}
 
 .bg {
     background-color: #01BFFF;
@@ -9,13 +20,24 @@
 }
 
 
-.user_field{
+.user_field {
     margin: auto;
     display: block
 }
 
+.header {
+	text-align: center;
+	font-size: 30px;
+}
+
 head {
     text-align: center;
+}
+
+body {
+	font-family: arial;
+	text-align: center;
+	color: black;
 }
 
 /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l*/
