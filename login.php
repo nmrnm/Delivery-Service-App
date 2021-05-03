@@ -81,6 +81,7 @@
         }
         echo "</table>";*/
     }
+    $conn->close()
     ?> 
     <script type = "text/javascript">
       document.getElementById("customerOrder").onclick = function() {
