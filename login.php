@@ -25,7 +25,7 @@
        $customer = $_POST["username"];
        $password = $_POST["password"];
 
-       $sql = "SELECT COUNT(DISTINCT UserID) AS count FROM Customer WHERE UserID = '$customer' AND password = '$password'";
+       $sql = "SELECT COUNT(DISTINCT Username) AS count FROM Customer WHERE Username = '$customer' AND Password = '$password'";
        $result = $conn->query($sql) or die(mysqli_error());
        $count = mysqli_fetch_assoc($result)['count'];
 
@@ -33,9 +33,10 @@
            echo "<p> Invalid Login Information. Please hit back button on your browser
                to go back to the login screen. </p>";
        }else{
-            $query = "SELECT Name FROM Customer WHERE UserID = '$customer'";
+            $query = "SELECT Name, UserID FROM Customer WHERE Username = '$customer'";
             $result = $conn->query($query) or die(mysqli_error());
             $name = mysqli_fetch_assoc($result)['Name'];
+            $uid = mysqli_fetch_assoc($result)['UserID'];
             echo "Welcome $name. ";
             echo "These are your orders: ";
             /* this button will jump to the order page when clicked */
@@ -43,7 +44,7 @@
             top: 5; right: 5;' >
                     Create New Order
                 </button>";
-            $sql = "SELECT * FROM MyOrder WHERE UserID = '$customer'";
+            $sql = "SELECT * FROM MyOrder WHERE UserID = '$uid'";
             $result = $conn->query($sql) or die(mysql_error());
             echo "<div align='center'><table class='styled-table box'><tr>";
             for($i = 0; $i < mysqli_num_fields($result); $i++) {
