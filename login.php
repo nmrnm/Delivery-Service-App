@@ -27,9 +27,16 @@
 		echo "Connection Failed:" . $conn->connect_error;
 		die("FAILED TO CONNECT");
 	}	
+    $type = NULL; // need this declared here
    	if($_SERVER['REQUEST_METHOD'] == "POST"){
        	$username = $_POST["username"];
        	$password = $_POST["password"];
+		if(!empty($username) and !empty($password)){
+			$_SESSION["username"] = $username;
+			$_SESSION["password"] = $password;
+		}
+       	$username = $_SESSION["username"];
+       	$password = $_SESSION["password"];
 
 		$type = $_SESSION["userType"];
 		$idName = "UserID";
@@ -80,27 +87,59 @@
                 echo "</tr>";
             }
             echo "</table></div>";
-       }
 
-        /*
-            //useful select all query for table
-            $sql = "SELECT * FROM Customer";
-        
-        $result = mysqli_query($conn, $sql) or die(mysql_error());
-        echo "<table class='styled-table'><tr>";
-        for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                $field_info = mysqli_fetch_field($result);
-                echo "<th>$field_info->name</th>";
-        }
-        echo "</tr>";
-        while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-            echo "<tr>";
-            foreach($line as $col_value){
-                echo "<td>$col_value</td>";
+            if($type == "Delivery_Driver"){
+                echo "<br> <br> These are pending orders: ";
+                echo "<br> <br> Select a checkbox and hit the button
+                at the bottom of the page to accept a pending order.";
+                $sql = "SELECT * FROM MyOrder WHERE DriverID IS NULL";
+                $result = $conn->query($sql);
+                echo "<div align='center'>
+                    <form action='login.php' method='post'> 
+                    <table class='styled-table box'><tr>";
+                for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                        $field_info = mysqli_fetch_field($result);
+                        echo "<th>$field_info->name</th>";
+                }
+                echo "<th>Select Item</th>";
+                echo "</tr>";
+                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                    echo "<tr>";
+                    foreach($line as $col_value){
+                        echo "<td>$col_value</td>";
+                    }
+                    $val = $line["OrderID"];
+                    echo "<td align='center'><input type='checkbox' 
+                                name='check[]' value='$val'></td>";
+                    echo "</tr>";
+                }
+                echo "</table>
+                     <input type='submit' value='Add Checked items'>
+                     </form>
+                    </div>";
             }
-            echo "</tr>";
-        }
-        echo "</table>";*/
+
+		   $check = $_POST['check'];
+		   if (isset($_POST['check'])) {
+			   foreach ($check as $ID){
+					$sql = "UPDATE MyOrder SET DriverID = $myid
+					 WHERE OrderID = $ID ";
+					$worked = $conn->query($sql);
+                    //header("Location:login.php");
+                    //exit;
+                    
+                    echo "<script src=/text/javascript>location.reload()</script>";
+					/*if($worked === TRUE){
+						echo "WORKED " ;
+					}else{
+						echo "NOT WORKED " ;
+                    }*/
+
+			   }
+		   }
+
+
+       }
     }
     $conn->close()
     ?> 
