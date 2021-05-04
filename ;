@@ -36,8 +36,10 @@
 
     <?php
     include('passwords.php');
+	include('login.php'):
     global $USERNAME;
     global $PASSWORD;
+	global $uid;
 
     $servername = "mysql.eecs.ku.edu";
     $username = $USERNAME;
@@ -46,7 +48,7 @@
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
-    session_start();
+
 
 	if($conn->connect_error){
 		echo "Connection Failed:" . $conn->connect_error;
@@ -113,23 +115,9 @@
         $orderID = $data_array['maxVal'] + 1;
         $check = $_GET['check'];
 		$quan = $_GET['quan'];
-
-        $curTime = time();
-        $dateNum = date("Ymd");
-        $userID = $_SESSION['UID'];
-        //echo strval($userID);
-        //echo strval($dateNum);
-        //echo "<br>" ;
-        //echo strval($curTime);
-        $sql = "INSERT INTO MyOrder(OrderID, DriverID, UserID, Start_Date, Time_Start, Duration, Delivery_Cost)
-        VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
-
-        $worked = $conn->query($sql);
-        if($worked === TRUE){
-            echo "WORKED ";
-        }else{
-            echo "NOT WORKED ";
-        }
+		
+		//createMyOrder
+		
 
 		if (isset($_GET['check'])) {
 			foreach ($check as $box){
@@ -137,16 +125,9 @@
 				$locID = $vars[0];
 				$itemID = $vars[1];
 				$rowNum = $vars[2];
-                $quantity = $quan[$rowNum];
- 		        $sql = "INSERT INTO Order_Has_Item(OrderID, ItemID, LocationID, Quantity)
-         		   VALUES($orderID, $itemID, $locID, $quantity)";
-                $worked = $conn->query($sql);
+ 		       //$sql = "INSERT INTO Order_Has_Item(OrderID, ItemID, LocationID, Quantity)";
+         		//   VALUES($orderID, 
 
-                /*if($worked === TRUE){
-                    echo "SUCCESSFUL INSERT";
-                }else {
-                    echo "NOT SUCCESSFUL INSERT";
-                }*/
 			}
 		} else {
 			echo "You did not choose any items.";

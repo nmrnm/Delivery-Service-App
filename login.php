@@ -8,12 +8,14 @@
     include('passwords.php');
     global $USERNAME;
     global $PASSWORD;
+    global $CURRENT_UID;
 
     $servername = "mysql.eecs.ku.edu";
     $username = $USERNAME;
     $password = $PASSWORD;
     $dbname = "$USERNAME";
 
+    
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -21,6 +23,7 @@
 		echo "Connection Failed:" . $conn->connect_error;
 		die("FAILED TO CONNECT");
 	}	
+    session_start();
    if($_SERVER['REQUEST_METHOD'] == "POST"){
        $customer = $_POST["username"];
        $password = $_POST["password"];
@@ -38,6 +41,7 @@
             $data =  mysqli_fetch_assoc($result);
             $name = $data['Name'];
             $uid = $data['UserID'];
+            $_SESSION['UID'] = $uid;
 
             echo "Welcome $name. ";
             echo "These are your orders: ";
