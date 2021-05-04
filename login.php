@@ -62,15 +62,16 @@
             /* this button will jump to the order page when clicked */
             if($type == "Customer"){
                     echo "Welcome $name. ";
-                    echo "These are your orders: ";
+                    echo "Here are your orders.";
                     
-                        echo "<button id='customerOrder' type='button' style='align: right; position: absolute;
+                   	echo "<button class='bigButton' id='customerOrder' type='button' style='align: right; position: absolute;
                     top: 5; right: 5;' >
                             Create New Order
                         </button>";
                         
-                    
-                    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid'";
+                    //Created
+                    echo "<br><br><span class='header'>Pending Orders</span>";
+                    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid' AND DriverID IS NULL";
                     $result = $conn->query($sql) or die(mysql_error());
                     
                     echo "<div align='center'><table class='styled-table box'><tr>";
@@ -87,6 +88,50 @@
                         echo "</tr>";
                     }
                     echo "</table></div>";
+                    
+                    
+                    //Accepted
+                    echo "<br><br><span class='header'>Ongoing Orders</span>";
+                    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid' AND DriverID IS NOT NULL AND Time_End IS NULL";
+                    $result = $conn->query($sql) or die(mysql_error());
+                    
+                    echo "<div align='center'><table class='styled-table box'><tr>";
+                    for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                            $field_info = mysqli_fetch_field($result);
+                            echo "<th>$field_info->name</th>";
+                    }
+                    echo "</tr>";
+                    while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                        echo "<tr>";
+                        foreach($line as $col_value){
+                            echo "<td>$col_value</td>";
+                        }
+                        echo "</tr>";
+                    }
+                    echo "</table></div>";
+                    
+                    
+                    //Finished
+                    echo "<br><br><span class='header'>Completed Orders</span>";
+                    
+                    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid' AND Time_End IS NOT NULL";
+                    $result = $conn->query($sql) or die(mysql_error());
+                    
+                    echo "<div align='center'><table class='styled-table box'><tr>";
+                    for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                            $field_info = mysqli_fetch_field($result);
+                            echo "<th>$field_info->name</th>";
+                    }
+                    echo "</tr>";
+                    while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                        echo "<tr>";
+                        foreach($line as $col_value){
+                            echo "<td>$col_value</td>";
+                        }
+                        echo "</tr>";
+                    }
+                    echo "</table></div>";
+                    
             }elseif($type == "Delivery_Driver"){
 
                 echo "Welcome $name. ";
