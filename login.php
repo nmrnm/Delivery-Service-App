@@ -139,21 +139,49 @@
             	$sql = "SELECT * FROM MyOrder WHERE DriverID = '$myid' AND Time_End IS NULL";
                 $result = $conn->query($sql) or die(mysql_error());
                 
-                echo "<div align='center'><table class='styled-table box'><tr>";
+                echo "<div align='center'><table class='styled-table box'><tr>
+                    <form action='login.php' method='post'>";
                 for($i = 0; $i < mysqli_num_fields($result); $i++) {
                         $field_info = mysqli_fetch_field($result);
                         echo "<th>$field_info->name</th>";
                 }
+                echo "<th>Select Item</th>";
                 echo "</tr>";
                 while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                     echo "<tr>";
                     foreach($line as $col_value){
                         echo "<td>$col_value</td>";
                     }
+                    $val = $line["OrderID"];
+                    echo "<td align='center'><input type='checkbox' 
+                                name='checkAcceptedDelivery[]' value='$val' ></td>";
                     echo "</tr>";
                 }
-                echo "</table></div>";
+                echo "</table>
+                     <input type='submit' value='Add Checked items'>
+                    </form>
+                    </div>";
 
+               $checkAccDeliv = $_POST['checkAcceptedDelivery'];
+               if (isset($_POST['checkAcceptedDelivery'])) {
+                   foreach ($checkAccDeliv as $ID){
+                        $cur_time = strval(time());
+                        echo $cur_time;
+                        $sql = "UPDATE MyOrder SET Time_End = $cur_time
+                         WHERE OrderID = $ID";
+                        $worked = $conn->query($sql);
+                        //header("Location:login.php");
+                        //exit;
+                        
+                        echo "<script src=/text/javascript>location.reload()</script>";
+                        if($worked === TRUE){
+                            echo "WORKED " ;
+                        }else{
+                            echo "NOT WORKED " ;
+                        }
+
+                   }
+               }
 
                 echo "<br> <br> These are pending orders that you can accept: ";
                 echo "<br> <br> Select a checkbox and hit the button
@@ -201,6 +229,27 @@
 
                    }
                }
+
+                echo "<br> <br> These are finished orders that you have already completed: ";
+               $sql = "SELECT * FROM MyOrder WHERE DriverID IS NOT NULL AND Time_End IS NOT 
+                   NULL";
+                $result = $conn->query($sql);
+                echo "<div align='center'>
+                    <table class='styled-table box'><tr>";
+                for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                        $field_info = mysqli_fetch_field($result);
+                        echo "<th>$field_info->name</th>";
+                }
+                echo "</tr>";
+                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                    echo "<tr>";
+                    foreach($line as $col_value){
+                        echo "<td>$col_value</td>";
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>
+                    </div>";
             }
        }
     }
