@@ -231,7 +231,7 @@
                }
 
                 echo "<br> <br> These are finished orders that you have already completed: ";
-               $sql = "SELECT * FROM MyOrder WHERE DriverID IS NOT NULL AND Time_End IS NOT 
+               $sql = "SELECT * FROM MyOrder WHERE DriverID = $myid AND Time_End IS NOT 
                    NULL";
                 $result = $conn->query($sql);
                 echo "<div align='center'>

@@ -121,7 +121,7 @@
         //echo strval($dateNum);
         //echo "<br>" ;
         //echo strval($curTime);
-        $sql = "INSERT INTO MyOrder(OrderID, DriverID, UserID, Start_Date, Time_Start, Duration, Delivery_Cost)
+        $sql = "INSERT INTO MyOrder(OrderID, DriverID, UserID, Start_Date, Time_Start, Time_End, Delivery_Cost)
         VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
 
         $worked = $conn->query($sql);
