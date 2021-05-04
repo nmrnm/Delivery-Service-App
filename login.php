@@ -59,38 +59,58 @@
             $myid = $data[$idName];
             $_SESSION['UID'] = $myid;
 
-            echo "Welcome $name. ";
-            echo "These are your orders: ";
             /* this button will jump to the order page when clicked */
-            if($type == "Customer")
-            	echo "<button id='customerOrder' type='button' style='align: right; position: absolute;
-            top: 5; right: 5;' >
-                    Create New Order
-                </button>";
+            if($type == "Customer"){
+                    echo "Welcome $name. ";
+                    echo "These are your orders: ";
+                    
+                        echo "<button id='customerOrder' type='button' style='align: right; position: absolute;
+                    top: 5; right: 5;' >
+                            Create New Order
+                        </button>";
+                        
+                    
+                    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid'";
+                    $result = $conn->query($sql) or die(mysql_error());
+                    
+                    echo "<div align='center'><table class='styled-table box'><tr>";
+                    for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                            $field_info = mysqli_fetch_field($result);
+                            echo "<th>$field_info->name</th>";
+                    }
+                    echo "</tr>";
+                    while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                        echo "<tr>";
+                        foreach($line as $col_value){
+                            echo "<td>$col_value</td>";
+                        }
+                        echo "</tr>";
+                    }
+                    echo "</table></div>";
+            }elseif($type == "Delivery_Driver"){
+
+                echo "Welcome $name. ";
+                echo "These are your accepted orders which are still running: ";
+            	$sql = "SELECT * FROM MyOrder WHERE DriverID = '$myid' AND Time_End IS NULL";
+                $result = $conn->query($sql) or die(mysql_error());
                 
-            
-            $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid'";
-            if($type == "Delivery_Driver")
-            	$sql = "SELECT * FROM MyOrder WHERE DriverID = '$myid'";
-            $result = $conn->query($sql) or die(mysql_error());
-            
-            echo "<div align='center'><table class='styled-table box'><tr>";
-            for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                    $field_info = mysqli_fetch_field($result);
-                    echo "<th>$field_info->name</th>";
-            }
-            echo "</tr>";
-            while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                echo "<tr>";
-                foreach($line as $col_value){
-                    echo "<td>$col_value</td>";
+                echo "<div align='center'><table class='styled-table box'><tr>";
+                for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                        $field_info = mysqli_fetch_field($result);
+                        echo "<th>$field_info->name</th>";
                 }
                 echo "</tr>";
-            }
-            echo "</table></div>";
+                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                    echo "<tr>";
+                    foreach($line as $col_value){
+                        echo "<td>$col_value</td>";
+                    }
+                    echo "</tr>";
+                }
+                echo "</table></div>";
 
-            if($type == "Delivery_Driver"){
-                echo "<br> <br> These are pending orders: ";
+
+                echo "<br> <br> These are pending orders that you can accept: ";
                 echo "<br> <br> Select a checkbox and hit the button
                 at the bottom of the page to accept a pending order.";
                 $sql = "SELECT * FROM MyOrder WHERE DriverID IS NULL";
@@ -118,28 +138,25 @@
                      <input type='submit' value='Add Checked items'>
                      </form>
                     </div>";
+               $check = $_POST['check'];
+               if (isset($_POST['check'])) {
+                   foreach ($check as $ID){
+                        $sql = "UPDATE MyOrder SET DriverID = $myid
+                         WHERE OrderID = $ID ";
+                        $worked = $conn->query($sql);
+                        //header("Location:login.php");
+                        //exit;
+                        
+                        echo "<script src=/text/javascript>location.reload()</script>";
+                        /*if($worked === TRUE){
+                            echo "WORKED " ;
+                        }else{
+                            echo "NOT WORKED " ;
+                        }*/
+
+                   }
+               }
             }
-
-		   $check = $_POST['check'];
-		   if (isset($_POST['check'])) {
-			   foreach ($check as $ID){
-					$sql = "UPDATE MyOrder SET DriverID = $myid
-					 WHERE OrderID = $ID ";
-					$worked = $conn->query($sql);
-                    //header("Location:login.php");
-                    //exit;
-                    
-                    echo "<script src=/text/javascript>location.reload()</script>";
-					/*if($worked === TRUE){
-						echo "WORKED " ;
-					}else{
-						echo "NOT WORKED " ;
-                    }*/
-
-			   }
-		   }
-
-
        }
     }
     $conn->close()

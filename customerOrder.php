@@ -152,11 +152,10 @@
 			echo "You did not choose any items.";
 		}
 	}  
-
-
+    
     $conn->close()
     ?>
-
+    <button class="bigButton" onclick="location.href='index.php'">Back to Home</button>
 
     </body>
 </html>
