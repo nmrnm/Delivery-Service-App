@@ -35,8 +35,10 @@
        }else{
             $query = "SELECT Name, UserID FROM Customer WHERE Username = '$customer'";
             $result = $conn->query($query) or die(mysqli_error());
-            $name = mysqli_fetch_assoc($result)['Name'];
-            $uid = mysqli_fetch_assoc($result)['UserID'];
+            $data =  mysqli_fetch_assoc($result);
+            $name = $data['Name'];
+            $uid = $data['UserID'];
+
             echo "Welcome $name. ";
             echo "These are your orders: ";
             /* this button will jump to the order page when clicked */
