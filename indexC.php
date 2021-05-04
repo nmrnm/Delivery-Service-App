@@ -1,18 +1,25 @@
+<?php
+	session_start();
+	$_SESSION["userType"] = "Customer";
+?>
+
 <html>
     <head>
         <link rel="stylesheet" href="index.css">
     </head>
-    <body class = "bg">
-    <div align="center"> <b style="font-size=30px;" align = "center">Delivery Service</b></div> 
+    <body class="bg">
+    <div class="header" align="center"> <b style="font-size=30px;" align = "center">Customer Login</b></div> 
     <br> <br> 
      <div class="box" align="center">
     <form action="login.php" method="post">
       Username: <br>
-      <input name = "username"type="text"/> <br>
+      <input name = "username"type="text"/> <br><br>
       Password:
       <input name = "password" class="user_field" type="text"/> <br> <br> 
-      <input type="submit" value="Login">
+      <input type="submit" value="Login" class="bigButton">
     </form>
+      	<br><br>
+  		<button class="bigButton" onclick="location.href='index.php'">Back to Home</button>
       <!-- <button id="loginType" type="button"
         onclick = "myFunction()"
         >Not a Customer? Click Here to Login as a Delivery Driver.</button>

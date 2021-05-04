@@ -1,3 +1,7 @@
+<?php
+	session_start();
+?>
+
 <html>
     <head>
         <link rel="stylesheet" href="index.css">
@@ -23,35 +27,45 @@
 		echo "Connection Failed:" . $conn->connect_error;
 		die("FAILED TO CONNECT");
 	}	
-    session_start();
-   if($_SERVER['REQUEST_METHOD'] == "POST"){
-       $customer = $_POST["username"];
-       $password = $_POST["password"];
+   	if($_SERVER['REQUEST_METHOD'] == "POST"){
+       	$username = $_POST["username"];
+       	$password = $_POST["password"];
 
-       $sql = "SELECT COUNT(DISTINCT Username) AS count FROM Customer WHERE Username = '$customer' AND Password = '$password'";
-       $result = $conn->query($sql) or die(mysqli_error());
-       $count = mysqli_fetch_assoc($result)['count'];
+		$type = $_SESSION["userType"];
+		$idName = "UserID";
+		if($type == "Delivery_Driver")
+			$idName = "DriverID";
 
-       if($count != 1){
-           echo "<p> Invalid Login Information. Please hit back button on your browser
-               to go back to the login screen. </p>";
-       }else{
-            $query = "SELECT Name, UserID FROM Customer WHERE Username = '$customer'";
+       	$sql = "SELECT COUNT(DISTINCT Username) AS count FROM " . $type . " WHERE Username = '$username' AND Password = '$password'";
+       	$result = $conn->query($sql) or die(mysqli_error());
+       	$count = mysqli_fetch_assoc($result)['count'];
+
+       	if($count != 1){
+           	echo "<br><p> That username/password does not match. </p>
+           	<br> <br>
+  			<button class=\"bigButton\" onclick=\"location.href='index".substr($type,0,1).".php'\">Back</button>";
+       	}else{
+            $query = "SELECT Name, " . $idName . " FROM " . $type . " WHERE Username = '$username'";
             $result = $conn->query($query) or die(mysqli_error());
             $data =  mysqli_fetch_assoc($result);
             $name = $data['Name'];
-            $uid = $data['UserID'];
-            $_SESSION['UID'] = $uid;
+            $myid = $data[$idName];
 
             echo "Welcome $name. ";
             echo "These are your orders: ";
             /* this button will jump to the order page when clicked */
-            echo "<button id='customerOrder' type='button' style='align: right; position: absolute;
+            if($type == "Customer")
+            	echo "<button id='customerOrder' type='button' style='align: right; position: absolute;
             top: 5; right: 5;' >
                     Create New Order
                 </button>";
-            $sql = "SELECT * FROM MyOrder WHERE UserID = '$uid'";
+                
+            
+            $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid'";
+            if($type == "Delivery_Driver")
+            	$sql = "SELECT * FROM MyOrder WHERE DriverID = '$myid'";
             $result = $conn->query($sql) or die(mysql_error());
+            
             echo "<div align='center'><table class='styled-table box'><tr>";
             for($i = 0; $i < mysqli_num_fields($result); $i++) {
                     $field_info = mysqli_fetch_field($result);
