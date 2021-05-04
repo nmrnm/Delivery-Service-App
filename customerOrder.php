@@ -19,7 +19,7 @@
            Enter amount willing to pay for delivery:  <br><br> 
 <i>(Note that if you make it too low,
            a delivery driver probably won't accept your order):</i> <br> <br>
-          <input type="submit" value="Confirm/Create Order"    </div>
+          <!--input type="submit" class="bigButton" value="Confirm Order"-->    </div>
 
     <br> <br>
     <div align="center"> <b><big style="font-size=50px;" align = "center">Add Items To Order:
@@ -53,24 +53,24 @@
 		die("FAILED TO CONNECT");
 	}	
 	if($_SERVER['REQUEST_METHOD'] == "POST"){
-	echo "DEBUG POST<br>";
-	$search = $_POST["search"];
-    //echo $search;
+		//echo "DEBUG POST<br>";
+		$search = $_POST["search"];
+		//echo $search;
 
-    $query = "SELECT L.Name AS LocationName, L.LocationID, 
-        L.Street_Address, L.City, L.State, I.Name AS ItemName, 
-        I.ItemID, I.Price FROM Item I, Location L WHERE I.LocationID = L.LocationID 
-        AND I.Name LIKE '%$search%'";
-    //echo $query;
-    $result = $conn->query($query) or die(mysqli_error());
-    if(empty($result->num_rows)){
-        echo "<div align='center'> The query returned no items. Please search again. </div> "; 
-    }else {
-        echo "<div align='center'> The query returned the following items. "; 
-        echo "Please select which items you would like to add to your order and <b> and then
-           select the button at the bottom of the page to add the items to your order.</b>
-            </div> "; 
-    echo "<div align='center'>
+		$query = "SELECT L.Name AS LocationName, L.LocationID, 
+		    L.Street_Address, L.City, L.State, I.Name AS ItemName, 
+		    I.ItemID, I.Price FROM Item I, Location L WHERE I.LocationID = L.LocationID 
+		    AND I.Name LIKE '%$search%'";
+		//echo $query;
+		$result = $conn->query($query) or die(mysqli_error());
+		if(empty($result->num_rows)){
+		    echo "<div align='center'> The query returned no items. Please search again. </div> "; 
+		}else {
+		    echo "<div align='center'> The query returned the following items. "; 
+		    echo "Please select which items you would like to add to your order and <b>
+		       select the button at the bottom of the page to add the items to your order.</b>
+		        </div> "; 
+		echo "<div align='center'>
         <form action='customerOrder.php' method='get'> 
         <table class='styled-table'><tr>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
@@ -105,33 +105,35 @@
 	}
    	
 	if($_SERVER['REQUEST_METHOD'] == 'GET'){
-		echo "DEBUG GET<br>";
-        $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
-        $result = $conn->query($query);
-        $data_array = $result->fetch_assoc();
-        
-        $orderID = $data_array['maxVal'] + 1;
-        $check = $_GET['check'];
-		$quan = $_GET['quan'];
-
-        $curTime = time();
-        $dateNum = date("Ymd");
-        $userID = $_SESSION['UID'];
-        echo "THIS IS YOUR UID: " . strval($userID);
-        //echo strval($dateNum);
-        //echo "<br>" ;
-        //echo strval($curTime);
-        $sql = "INSERT INTO MyOrder(OrderID, DriverID, UserID, Start_Date, Time_Start, Time_End, Delivery_Cost)
-        VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
-
-        $worked = $conn->query($sql);
-        if($worked === TRUE){
-            echo "WORKED ";
-        }else{
-            echo "NOT WORKED ";
-        }
-
+			//echo "DEBUG GET<br>";
 		if (isset($_GET['check'])) {
+		    
+		    $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
+		    $result = $conn->query($query);
+		    $data_array = $result->fetch_assoc();
+		    
+		    $orderID = $data_array['maxVal'] + 1;
+		    $check = $_GET['check'];
+			$quan = $_GET['quan'];
+
+		    $curTime = time();
+		    $dateNum = date("Ymd");
+		    $userID = $_SESSION['UID'];
+		    //echo "THIS IS YOUR UID: " . strval($userID);
+		    //echo strval($dateNum);
+		    //echo "<br>" ;
+		    //echo strval($curTime);
+		    $sql = "INSERT INTO MyOrder(OrderID, DriverID, UserID, Start_Date, Time_Start, Time_End, Delivery_Cost)
+		    VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
+
+		    $worked = $conn->query($sql);
+		    /*if($worked === TRUE){
+		        echo "WORKED ";
+		    }else{
+		        echo "NOT WORKED ";
+		    }*/
+
+		
 			foreach ($check as $box){
 				$vars = explode("_", $box); // split string 
 				$locID = $vars[0];
@@ -142,11 +144,11 @@
          		   VALUES($orderID, $itemID, $locID, $quantity)";
                 $worked = $conn->query($sql);
 
-                if($worked === TRUE){
+                /*if($worked === TRUE){
                     echo "SUCCESSFUL INSERT";
                 }else {
                     echo "NOT SUCCESSFUL INSERT";
-                }
+                }*/
 			}
 		} else {
 			echo "You did not choose any items.";
@@ -155,7 +157,10 @@
     
     $conn->close()
     ?>
-    <button class="bigButton" onclick="location.href='index.php'">Back to Home</button>
+    <br><br>
+    <button align="left" class="bigButton" onclick="location.href='indexC.php'">Back</button>
+    <br>
+    <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
 
     </body>
 </html>

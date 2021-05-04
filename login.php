@@ -166,7 +166,7 @@
                if (isset($_POST['checkAcceptedDelivery'])) {
                    foreach ($checkAccDeliv as $ID){
                         $cur_time = strval(time());
-                        echo $cur_time;
+                        //echo $cur_time;
                         $sql = "UPDATE MyOrder SET Time_End = $cur_time
                          WHERE OrderID = $ID";
                         $worked = $conn->query($sql);
@@ -174,11 +174,11 @@
                         //exit;
                         
                         echo "<script src=/text/javascript>location.reload()</script>";
-                        if($worked === TRUE){
+                        /*if($worked === TRUE){
                             echo "WORKED " ;
                         }else{
                             echo "NOT WORKED " ;
-                        }
+                        }*/
 
                    }
                }
