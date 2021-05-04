@@ -94,7 +94,7 @@
        			$did = mysqli_fetch_assoc($result)['max'];
        			$did++;
        		
-       			$sql = "INSERT INTO Delivery_Driver VALUES('$did','$pswd','$name','NULL','$phone','$license','$state','$model','$year','$make','$username');";
+       			$sql = "INSERT INTO Delivery_Driver VALUES('$did','$pswd','$name','NULL','$phone','$license','$state','$model','$year','$make','$uname');";
        			$result = $conn->query($sql) or die(mysqli_error());
        			
        			header("Location: indexD.php");
