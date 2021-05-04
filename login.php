@@ -148,5 +148,7 @@
               location.href = "customerOrder.php";
       }
     </script>
+    <br><br>
+	<button class="bigButton" onclick="location.href='index.php'">Back to Home</button>
 	</body>
 <html>
