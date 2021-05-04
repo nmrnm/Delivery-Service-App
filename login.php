@@ -57,6 +57,7 @@
             $data =  mysqli_fetch_assoc($result);
             $name = $data['Name'];
             $myid = $data[$idName];
+            $_SESSION['UID'] = $myid;
 
             echo "Welcome $name. ";
             echo "These are your orders: ";

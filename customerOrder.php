@@ -117,7 +117,7 @@
         $curTime = time();
         $dateNum = date("Ymd");
         $userID = $_SESSION['UID'];
-        //echo strval($userID);
+        echo "THIS IS YOUR UID: " . strval($userID);
         //echo strval($dateNum);
         //echo "<br>" ;
         //echo strval($curTime);
@@ -142,11 +142,11 @@
          		   VALUES($orderID, $itemID, $locID, $quantity)";
                 $worked = $conn->query($sql);
 
-                /*if($worked === TRUE){
+                if($worked === TRUE){
                     echo "SUCCESSFUL INSERT";
                 }else {
                     echo "NOT SUCCESSFUL INSERT";
-                }*/
+                }
 			}
 		} else {
 			echo "You did not choose any items.";
