@@ -158,7 +158,7 @@
     $conn->close()
     ?>
     <br><br>
-    <button align="left" class="bigButton" onclick="location.href='indexC.php'">Back</button>
+    <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
     <br>
     <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
 
