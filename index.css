@@ -15,7 +15,8 @@
 }
 
 .bg {
-    background-color: #01BFFF;
+    /*background-color: #01BFFF;*/
+    background-image: linear-gradient(to right, #00d2ff, #3a7bd5);
     font-family: arial;
     font-size: 20;
 }
@@ -42,6 +43,8 @@ body {
 }
 
 /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l*/
+
+
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
@@ -65,6 +68,11 @@ body {
     background-color: green;
 }
 
+table{
+    /*table-layout: fixed;*/
+    overflow-x: scroll;
+}
+
 table th:first-child{
   border-radius:25px 0 0 0px;
 }
@@ -84,7 +92,21 @@ table th:last-child{
     color: #009879;
 }
 
+/*th {
+    word-wrap: break-word;
+}*/
+
 td {
     border: 1px solid black;
+    width: 100%;
 }
+
+
+/* think this is for input inside of the table */
+input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
 

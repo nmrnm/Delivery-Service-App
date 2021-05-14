@@ -1,38 +1,56 @@
 <html>
     <head>
-        <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" type="text/css"href="index.css"/> 
+        <link rel="stylesheet" type="text/css" href="popup.css"/>
+        <link rel="stylesheet" type="text/css" href="tablescroll.css"/>
+<!-- https://stackoverflow.com/questions/62051806/how-to-use-div-to-layout-a-nav-bar-two-column-div-and-a-bottom-div -->
+        <style>
+       body {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto 1fr auto;
+          grid-template-areas: "nav nav" "column1 column2" "bottom-row bottom-row";
+          width: 100%;
+          height: 100%;
+          margin: 0;
+        }
+
+        nav {
+          grid-area: nav;
+          align-self: center;
+        }
+
+        .column1 {
+          grid-area: column1;
+          width: 800;
+        }
+
+        .column2 {
+          grid-area: column2;
+          width: 800;
+        }
+
+        .bottom-row {
+          grid-area: bottom-row;
+          justify-self: center;
+        }
+        </style>
     </head>
 
     <body class = "bg">
 
+    <div class="column1"> 
+        <b>
+             <big style="font-size=50px;">Create New Order</big>
+        </b>
+    </div> 
 
-    <div align="center"> <b><big style="font-size=50px;" align = "center">Create New Order
-</big></b></div> 
-    <br> <br>
-    <div align="left">
-            
-           Current items in cart: <br><br> 
-           Current number of items in cart: <br><br> 
-           Total price of items in cart: <br><br> 
-           Flat order fee: $5.00  <br> <br> 
-           <b> Order Subtotal:  </b> <br> <br> 
-           Enter amount willing to pay for delivery:  <br><br> 
-<i>(Note that if you make it too low,
-           a delivery driver probably won't accept your order):</i> <br> <br>
-          <!--input type="submit" class="bigButton" value="Confirm Order"-->    </div>
-
-    <br> <br>
-    <div align="center"> <b><big style="font-size=50px;" align = "center">Add Items To Order:
-</big></b></div> 
-    <br> <br>
-    
-    <div align="center">
+    <div class="column2">
        <form method="post">
-          Search by Item Name:  <br>
+          Search by Item Name:  <br> <br>
           <input name="search" type="text"/>
           <input type="submit" value="Search">
         </form>
-    </div>
 
     <?php
     include('passwords.php');
@@ -67,11 +85,14 @@
 		    echo "<div align='center'> The query returned no items. Please search again. </div> "; 
 		}else {
 		    echo "<div align='center'> The query returned the following items. "; 
-		    echo "Please select which items you would like to add to your order and <b>
+            echo "Please select which items you would like to add to your order by scrolling
+                horizontally (if necessary) and checking the 
+               selected items and selecting quantities and <b>
 		       select the button at the bottom of the page to add the items to your order.</b>
 		        </div> "; 
 		echo "<div align='center'>
         <form action='customerOrder.php' method='get'> 
+       <div class='search-table-outter' >
         <table class='styled-table'><tr>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
                 $field_info = mysqli_fetch_field($result);
@@ -80,8 +101,14 @@
         echo "<th>Select Item</th><th>Quantity</th>";
         echo "</tr>";
 		$i = 0;
+        
+                //<!-- <span class='popuptext' id='myPopup'>A Simple Popup!</span> -->
         while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-            echo "<tr>";
+            //"<div style='z-index: -1;' class='popup' onmouseover='popMoreDetails()'>
+            //class='popup' onmouseover='popMoreDetails()'
+             echo "<tr >
+            ";
+
             foreach($line as $col_value){
                 echo "<td>$col_value</td>";
             }
@@ -92,10 +119,12 @@
                 name='check[]' value='$val3'></td>";
             echo"<td align='center'>
                 <input type='number' min='1' value='1' name='quan[]'></td>
-                </tr>";
+                </tr>
+                </div>";
 			$i = $i + 1;
         }
         echo "</table>
+            </div>
             <input type='submit' value='Add Checked items'>
             </form>
             </div>";
@@ -151,17 +180,26 @@
                 }*/
 			}
 		} else {
-			echo "You did not choose any items.";
+			//echo "You did not choose any items.";
 		}
 	}  
     
     $conn->close()
     ?>
-    <br><br>
-    <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
-    <br>
-    <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
-
+    </div>
+    <div class="bottom-row">
+        <br><br>
+        <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
+        <br> <br> 
+        <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
+    </div>
+        <script>
+         function popMoreDetails() {
+             console.log("DEBUG popmoredetails");
+             var popup = document.getElementById("myPopup");
+             popup.classList.toggle("show");
+         }
+        </script>
     </body>
 </html>
 
