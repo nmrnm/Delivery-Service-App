@@ -22,12 +22,13 @@
 
         .column1 {
           grid-area: column1;
-          width: 800;
+          /*width: 75%;*/
         }
 
         .column2 {
           grid-area: column2;
-          width: 800;
+          
+          /*width: 50%;*/
         }
 
         .bottom-row {
@@ -39,13 +40,58 @@
 
     <body class = "bg">
 
-    <div class="column1"> 
-        <b>
-             <big style="font-size=50px;">Create New Order</big>
-        </b>
+        <div class="search-table-outter"style="min-width: 800px;"> 
+            <b>
+                 <big style="font-size=50px;">Create New Order</big>
+            </b>
+            <?php
+            include('passwords.php');
+            global $USERNAME;
+            global $PASSWORD;
+
+            $servername = "mysql.eecs.ku.edu";
+            $username = $USERNAME;
+            $password = $PASSWORD;
+            $dbname = "$USERNAME";
+            session_start();
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            echo $_SESSION['UID'];
+            if($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+                $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
+                $result = $conn->query($query);
+                $data_array = $result->fetch_assoc();
+                $orderID = $data_array['maxVal'];
+
+                $query = "SELECT * FROM MyOrder WHERE OrderID = $orderID";
+                $result = $conn->query($query);
+
+                echo "<div align='center'>
+                    <table class='styled-table box'><tr>";
+
+                for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                        $field_info = mysqli_fetch_field($result);
+                        echo "<th>$field_info->name</th>";
+                }
+                echo "</tr>";
+                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                    echo "<tr>";
+                    foreach($line as $col_value){
+                        echo "<td>$col_value</td>";
+                    }
+                    echo "</tr>";
+                }
+                echo "</table></div>";
+		    $result = $conn->query($query) or die(mysqli_error());
+        }
+
+        $conn->close()
+
+        /*session_start();*/
+        ?>
     </div> 
 
-    <div class="column2">
+    <div style="min-width: 800px;">
        <form method="post">
           Search by Item Name:  <br> <br>
           <input name="search" type="text"/>
@@ -178,7 +224,8 @@
                 }else {
                     echo "NOT SUCCESSFUL INSERT";
                 }*/
-			}
+            } 
+            
 		} else {
 			//echo "You did not choose any items.";
 		}

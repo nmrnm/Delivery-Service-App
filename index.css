@@ -50,16 +50,16 @@ body {
     margin: 25px 0;
     font-size: 0.9em;
     font-family: sans-serif;
-    min-width: 400px;
+    /*min-width: 400px;*/
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-	table-layout: fixed;
+	table-layout: auto;
     background-color: #FCFFDB;
-
+    display: table;
     border-radius: 25px;
 }
 
 .style_table thead {
-	display: table-header-group;
+	/*display: table-header-group;*/
     border-radius: 25px;
 }
 
