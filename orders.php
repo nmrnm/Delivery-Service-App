@@ -51,23 +51,28 @@
 	   	echo "<button class='bigButton' id='customerOrder' type='button' style='align: right; position: absolute;
 	    top: 5; right: 5;' >
 	            Create New Order
+	        </button> <br><br>";
+	        
+	    echo "<button class='bigButton' id='logisticsC' type='button' style='align: right; position: absolute;
+	    top: 80; right: 5;' >
+	            Logistics
 	        </button>";
 	        
 	    //Created
 	    echo "<br><br><span class='header'>Pending Orders</span>";
-	    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid' AND DriverID IS NULL";
+	    $sql = "SELECT OrderID, Start_Date, Time_Start FROM MyOrder WHERE UserID = '$myid' AND DriverID IS NULL";
 	    $result = $conn->query($sql) or die(mysql_error());
 	    
 	    echo "<div align='center'><table class='styled-table box'><tr>";
 	    for($i = 0; $i < mysqli_num_fields($result); $i++) {
-	            $field_info = mysqli_fetch_field($result);
-	            echo "<th>$field_info->name</th>";
+            $field_info = mysqli_fetch_field($result);
+    		echo "<th>$field_info->name</th>";
 	    }
 	    echo "</tr>";
 	    while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
 	        echo "<tr>";
 	        foreach($line as $col_value){
-	            echo "<td>$col_value</td>";
+            	echo "<td>$col_value</td>";
 	        }
 	        echo "</tr>";
 	    }
@@ -81,8 +86,11 @@
 	    
 	    echo "<div align='center'><table class='styled-table box'><tr>";
 	    for($i = 0; $i < mysqli_num_fields($result); $i++) {
-	            $field_info = mysqli_fetch_field($result);
-	            echo "<th>$field_info->name</th>";
+	    	$field_info = mysqli_fetch_field($result);
+	    	if($i == 1)
+	    		echo "<th>Driver</th>";
+	    	else
+	    		echo "<th>$field_info->name</th>";
 	    }
 	    echo "</tr>";
 	    while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -103,8 +111,11 @@
 	    
 	    echo "<div align='center'><table class='styled-table box'><tr>";
 	    for($i = 0; $i < mysqli_num_fields($result); $i++) {
-	            $field_info = mysqli_fetch_field($result);
-	            echo "<th>$field_info->name</th>";
+            $field_info = mysqli_fetch_field($result);
+	    	if($i == 1)
+	    		echo "<th>Driver</th>";
+	    	else
+	    		echo "<th>$field_info->name</th>";
 	    }
 	    echo "</tr>";
 	    while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -120,14 +131,76 @@
     elseif($type == "Delivery_Driver")
     {
         echo "Welcome $name. ";
-        echo "These are your accepted orders which are still running: ";
-    	$sql = "SELECT * FROM MyOrder WHERE DriverID = '$myid' AND Time_End IS NULL";
+        
+	   	echo "<button class='bigButton' id='logisticsD' type='button' style='align: right; position: absolute;
+	    top: 5; right: 5;' >
+	            Logistics
+	        </button>";
+            
+        //Pending
+        echo "<br> <br> These are pending orders that you can accept: ";
+        echo "<br> <br> Select a checkbox and hit the button
+        at the bottom of the page to accept a pending order.";
+        $sql = "SELECT OrderID, Username, Start_Date, Time_Start FROM MyOrder, Customer WHERE DriverID IS NULL AND Customer.UserID = MyOrder.UserID";
+        $result = $conn->query($sql) or die(mysql_error());
+        
+         echo "<div align='center'><table class='styled-table box'><tr>
+            <form action='orders.php' method='post'>";
+        for($i = 0; $i < mysqli_num_fields($result); $i++) {
+            $field_info = mysqli_fetch_field($result);
+        	if($i == 1)
+        		echo "<th>Customer</th>";
+        	else
+                echo "<th>$field_info->name</th>";
+        }
+        echo "<th>Select Item</th>";
+        echo "</tr>";
+        while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+            echo "<tr>";
+            foreach($line as $col_value){
+                echo "<td>$col_value</td>";
+            }
+            $val = $line["OrderID"];
+            echo "<td align='center'><input type='checkbox' 
+                        name='checks[]' value='$val' ></td>";
+            echo "</tr>";
+        }
+        echo "</table>
+             <input type='submit' value='Add Checked Items' class='bigButton'>
+            </form>
+            </div>";
+            
+       if (isset($_POST['checks'])) {
+       		echo "yes";
+          $checks = $_POST['checks'];
+         foreach ($checks as $ID){
+            $sql = "UPDATE MyOrder SET DriverID = $myid
+                 WHERE OrderID = $ID";
+            $worked = $conn->query($sql);
+                
+            //echo "<script src=/text/javascript>location.reload()</script>";
+            /*if($worked === TRUE){
+                echo "WORKED " ;
+            }else{
+                echo "NOT WORKED " ;
+            }*/
+   		}
+           	header("Location:orders.php");
+            //exit;
+       }
+            
+        //Accepted
+        echo "<br><br>These are your accepted orders which are still running: ";
+    	$sql = "SELECT OrderID, Username, Start_Date, Time_Start FROM MyOrder, Customer WHERE DriverID = '$myid' AND Time_End IS NULL AND Customer.UserID = MyOrder.UserID";
         $result = $conn->query($sql) or die(mysql_error());
         
         echo "<div align='center'><table class='styled-table box'><tr>
             <form action='orders.php' method='post'>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                $field_info = mysqli_fetch_field($result);
+            $field_info = mysqli_fetch_field($result);
+        	if($i == 1)
+        		echo "<th>Customer</th>";
+        	else
                 echo "<th>$field_info->name</th>";
         }
         echo "<th>Select Item</th>";
@@ -143,20 +216,19 @@
             echo "</tr>";
         }
         echo "</table>
-             <input type='submit' value='Add Checked items'>
+             <input type='submit' value='Add Checked Items' class='bigButton'>
             </form>
             </div>";
 
-       $checkAccDeliv = $_POST['checkAcceptedDelivery'];
        if (isset($_POST['checkAcceptedDelivery'])) {
+       		echo "no";
+          $checkAccDeliv = $_POST['checkAcceptedDelivery'];
            foreach ($checkAccDeliv as $ID){
                 $cur_time = strval(time());
                 //echo $cur_time;
                 $sql = "UPDATE MyOrder SET Time_End = $cur_time
                  WHERE OrderID = $ID";
                 $worked = $conn->query($sql);
-                header("Location:orders.php");
-                exit;
                 
                 //echo "<script src=/text/javascript>location.reload()</script>";
                 /*if($worked === TRUE){
@@ -165,63 +237,22 @@
                     echo "NOT WORKED " ;
                 }*/
            }
+           	header("Location:orders.php");
+            //exit;
        }
-
-        echo "<br> <br> These are pending orders that you can accept: ";
-        echo "<br> <br> Select a checkbox and hit the button
-        at the bottom of the page to accept a pending order.";
-        $sql = "SELECT * FROM MyOrder WHERE DriverID IS NULL";
-        $result = $conn->query($sql);
-        echo "<div align='center'>
-            <form action='orders.php' method='post'> 
-            <table class='styled-table box'><tr>";
-        for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                $field_info = mysqli_fetch_field($result);
-                echo "<th>$field_info->name</th>";
-        }
-        echo "<th>Select Item</th>";
-        echo "</tr>";
-        while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-            echo "<tr>";
-            foreach($line as $col_value){
-                echo "<td>$col_value</td>";
-            }
-            $val = $line["OrderID"];
-            echo "<td align='center'><input type='checkbox' 
-                        name='check[]' value='$val'></td>";
-            echo "</tr>";
-        }
-        echo "</table>
-             <input type='submit' value='Add Checked items'>
-             </form>
-            </div>";
-       $check = $_POST['check'];
-       if (isset($_POST['check'])) {
-           foreach ($check as $ID){
-                $sql = "UPDATE MyOrder SET DriverID = $myid
-                 WHERE OrderID = $ID ";
-                $worked = $conn->query($sql);
-                header("Location:orders.php");
-                exit;
-                
-                //echo "<script src=/text/javascript>location.reload()</script>";
-                /*if($worked === TRUE){
-                    echo "WORKED " ;
-                }else{
-                    echo "NOT WORKED " ;
-                }*/
-
-           }
-       }
-
+       
+   		//Finished
         echo "<br> <br> These are finished orders that you have already completed: ";
-       $sql = "SELECT * FROM MyOrder WHERE DriverID = $myid AND Time_End IS NOT 
-           NULL";
+       $sql = "SELECT OrderID, Username, Start_Date, Time_Start, Time_End FROM MyOrder, Customer WHERE DriverID = $myid AND Time_End IS NOT NULL AND Customer.UserID = MyOrder.UserID";
         $result = $conn->query($sql);
+        
         echo "<div align='center'>
             <table class='styled-table box'><tr>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                $field_info = mysqli_fetch_field($result);
+			$field_info = mysqli_fetch_field($result);
+        	if($i == 1)
+        		echo "<th>Customer</th>";
+        	else
                 echo "<th>$field_info->name</th>";
         }
         echo "</tr>";
@@ -234,12 +265,23 @@
         }
         echo "</table>
             </div>";
+       
    	}
     $conn->close()
     ?> 
     <script type = "text/javascript">
       document.getElementById("customerOrder").onclick = function() {
               location.href = "customerOrder.php";
+      }
+    </script>
+    <script type = "text/javascript">
+      document.getElementById("logisticsD").onclick = function() {
+              location.href = "logisticsD.php";
+      }
+    </script>
+    <script type = "text/javascript">
+      document.getElementById("logisticsC").onclick = function() {
+              location.href = "logisticsC.php";
       }
     </script>
     <br><br>
