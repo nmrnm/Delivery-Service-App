@@ -127,20 +127,23 @@
 
 
 	}
-   	
+
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			//echo "DEBUG GET<br>";
-		if (isset($_POST['check'])) {
-		    
-		    $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
-		    $result = $conn->query($query);
-		    $data_array = $result->fetch_assoc();
-
-            if(empty($data_array['maxVal'])){
-		        $orderID = 1;
-            }else {
-		        $orderID = $data_array['maxVal'] + 1;
-            }
+        $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
+        $result = $conn->query($query);
+        $data_array = $result->fetch_assoc();
+    session_start();
+            //echo "HELLO THERE";
+        if($_POST['theSubmitButton']){
+            //echo "WHTA IS GOING ONE";
+            $_SESSION['curOrderID'] = $data_array['maxVal'] + 1;
+            //echo $_SESSION['curOrderID'];
+        }
+        if (isset($_POST['check'])) {
+		    //echo "<br>ISSET POST ";
+            $orderID = $_SESSION['curOrderID'];
+		    echo  $_SESSION['curOrderID'];
 		    $check = $_POST['check'];
 			$quan = $_POST['quan'];
 
@@ -202,7 +205,9 @@
             session_start();
             $conn = new mysqli($servername, $username, $password, $dbname);
             //echo $_SESSION['UID'];
-
+            if($_POST['theSubmitButton']){
+                exit;
+            }
                 $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
                 $result = $conn->query($query);
                 $data_array = $result->fetch_assoc();
@@ -235,13 +240,13 @@
         /*session_start();*/
         ?>
 
-        <form method='get'>
-          <div align='left' class='checkboxes'>
-            <label><input style='width: 10px;' type='checkbox'> 
+        <form method='post' >
+          <!-- <div align='left' class='checkboxes'>
+            <label><input name='submitBox' style='width: 10px;' type='checkbox'> 
     <span><i> &nbsp;&nbsp;
             I understand that I cannot delete the order after submitting. </i></span></label>
-          </div> <br>
-          <input type="submit" value="Submit Order">
+          </div> <br> -->
+          <input type="submit" name='theSubmitButton' value="Create New Order">
         </form>
     </div> 
 
