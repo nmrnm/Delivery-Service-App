@@ -40,10 +40,10 @@
     $result = $conn->query($sql) or die(mysql_error());
     
     echo "<div align='center'><table class='styled-table box'><tr>";
-    for($i = 0; $i < mysqli_num_fields($result); $i++) {
+    /*for($i = 0; $i < mysqli_num_fields($result); $i++) {
             $field_info = mysqli_fetch_field($result);
             echo "<th>$field_info->name</th>";
-    }
+    }*/
     echo "</tr>";
     while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
         echo "<tr>";

@@ -90,7 +90,8 @@
        <div class='search-table-outter' >
         <table class='styled-table'><tr>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                $field_info = mysqli_fetch_field($result);
+            $field_info = mysqli_fetch_field($result);
+            if($i != 1 && $i != 6)
                 echo "<th>$field_info->name</th>";
         }
         echo "<th>Select Item</th><th>Quantity</th>";
@@ -103,9 +104,11 @@
             //class='popup' onmouseover='popMoreDetails()'
              echo "<tr >
             ";
-
+			$count = 0;
             foreach($line as $col_value){
-                echo "<td>$col_value</td>";
+            	if($count != 1 && $count != 6)
+                	echo "<td>$col_value</td>";
+            	$count++;
             }
             $val1 = $line["LocationID"];
             $val2 = $line["ItemID"];
@@ -212,7 +215,7 @@
                 $data_array = $result->fetch_assoc();
                 $orderID = $data_array['maxVal'];
 
-                $query = "SELECT ItemID, LocationID, Quantity FROM Order_Has_Item WHERE OrderID = $orderID";
+                $query = "SELECT Item.Name, Location.Name, Order_Has_Item.Quantity FROM Order_Has_Item, Item, Location WHERE OrderID = $orderID AND Item.ItemID = Order_Has_Item.ItemID AND Location.LocationID = Order_Has_Item.LocationID";
                 $result = $conn->query($query);
 
                 echo "<br><br><b>Current Order-ID of order: " . strval($_SESSION['curOrderID']) . "</b>";

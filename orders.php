@@ -81,7 +81,7 @@
 	    
 	    //Accepted
 	    echo "<br><br><span class='header'>Ongoing Orders</span>";
-	    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid' AND DriverID IS NOT NULL AND Time_End IS NULL";
+	    $sql = "SELECT OrderID, Username, Start_Date, Time_Start FROM MyOrder, Delivery_Driver WHERE UserID = '$myid' AND Time_End IS NULL AND Delivery_Driver.DriverID = MyOrder.DriverID";
 	    $result = $conn->query($sql) or die(mysql_error());
 	    
 	    echo "<div align='center'><table class='styled-table box'><tr>";
@@ -106,7 +106,7 @@
 	    //Finished
 	    echo "<br><br><span class='header'>Completed Orders</span>";
 	    
-	    $sql = "SELECT * FROM MyOrder WHERE UserID = '$myid' AND Time_End IS NOT NULL";
+	    $sql = "SELECT OrderID, Username, Start_Date, Time_Start, Time_End FROM MyOrder, Delivery_Driver WHERE UserID = '$myid' AND Time_End IS NOT NULL AND Delivery_Driver.DriverID = MyOrder.DriverID";
 	    $result = $conn->query($sql) or die(mysql_error());
 	    
 	    echo "<div align='center'><table class='styled-table box'><tr>";
@@ -138,6 +138,7 @@
 	        </button>";
             
         //Pending
+     	echo "<br><br><span class='header'>Pending Orders</span>";
         echo "<br> <br> These are pending orders that you can accept: ";
         echo "<br> <br> Select a checkbox and hit the button
         at the bottom of the page to accept a pending order.";
@@ -191,6 +192,7 @@
        }
             
         //Accepted
+        echo "<br><br><span class='header'>Accepted Orders</span>";
         echo "<br><br>These are your accepted orders which are still running: ";
     	$sql = "SELECT OrderID, Username, Start_Date, Time_Start FROM MyOrder, Customer WHERE DriverID = '$myid' AND Time_End IS NULL AND Customer.UserID = MyOrder.UserID";
         $result = $conn->query($sql) or die(mysql_error());
@@ -245,6 +247,7 @@
            	header("Location:orders.php");
         }
    		//Finished
+   		echo "<br><br><span class='header'>Finished Orders</span>";
         echo "<br> <br> These are finished orders that you have already completed: ";
        $sql = "SELECT OrderID, Username, Start_Date, Time_Start, Time_End FROM MyOrder, Customer WHERE DriverID = $myid AND Time_End IS NOT NULL AND Customer.UserID = MyOrder.UserID";
         $result = $conn->query($sql);
