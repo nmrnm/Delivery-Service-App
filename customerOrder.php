@@ -4,7 +4,7 @@
         <link rel="stylesheet" type="text/css" href="popup.css"/>
         <link rel="stylesheet" type="text/css" href="tablescroll.css"/>
 <!-- https://stackoverflow.com/questions/62051806/how-to-use-div-to-layout-a-nav-bar-two-column-div-and-a-bottom-div -->
-        <style>
+       <style>
        body {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -40,59 +40,8 @@
 
     <body class = "bg">
 
-        <div class="search-table-outter"style="min-width: 800px;"> 
-            <b>
-                 <big style="font-size=50px;">Create New Order</big>
-            </b>
-            <?php
-            include('passwords.php');
-            global $USERNAME;
-            global $PASSWORD;
-
-            $servername = "mysql.eecs.ku.edu";
-            $username = $USERNAME;
-            $password = $PASSWORD;
-            $dbname = "$USERNAME";
-            session_start();
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            echo $_SESSION['UID'];
-            if($_SERVER['REQUEST_METHOD'] == 'GET'){
-
-                $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
-                $result = $conn->query($query);
-                $data_array = $result->fetch_assoc();
-                $orderID = $data_array['maxVal'];
-
-                $query = "SELECT * FROM MyOrder WHERE OrderID = $orderID";
-                $result = $conn->query($query);
-
-                echo "<div align='center'>
-                    <table class='styled-table box'><tr>";
-
-                for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                        $field_info = mysqli_fetch_field($result);
-                        echo "<th>$field_info->name</th>";
-                }
-                echo "</tr>";
-                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                    echo "<tr>";
-                    foreach($line as $col_value){
-                        echo "<td>$col_value</td>";
-                    }
-                    echo "</tr>";
-                }
-                echo "</table></div>";
-		    $result = $conn->query($query) or die(mysqli_error());
-        }
-
-        $conn->close()
-
-        /*session_start();*/
-        ?>
-    </div> 
-
-    <div style="min-width: 800px;">
-       <form method="post">
+    <div style="min-width: 800px;padding: 2em;">
+       <form method="get">
           Search by Item Name:  <br> <br>
           <input name="search" type="text"/>
           <input type="submit" value="Search">
@@ -116,9 +65,9 @@
 		echo "Connection Failed:" . $conn->connect_error;
 		die("FAILED TO CONNECT");
 	}	
-	if($_SERVER['REQUEST_METHOD'] == "POST"){
+	if($_SERVER['REQUEST_METHOD'] == "GET"){
 		//echo "DEBUG POST<br>";
-		$search = $_POST["search"];
+		$search = $_GET["search"];
 		//echo $search;
 
 		$query = "SELECT L.Name AS LocationName, L.LocationID, 
@@ -137,7 +86,7 @@
 		       select the button at the bottom of the page to add the items to your order.</b>
 		        </div> "; 
 		echo "<div align='center'>
-        <form action='customerOrder.php' method='get'> 
+        <form action='customerOrder.php' method='post'> 
        <div class='search-table-outter' >
         <table class='styled-table'><tr>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
@@ -178,18 +127,25 @@
 
 
 	}
-   	
-	if($_SERVER['REQUEST_METHOD'] == 'GET'){
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST'){
 			//echo "DEBUG GET<br>";
-		if (isset($_GET['check'])) {
-		    
-		    $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
-		    $result = $conn->query($query);
-		    $data_array = $result->fetch_assoc();
-		    
-		    $orderID = $data_array['maxVal'] + 1;
-		    $check = $_GET['check'];
-			$quan = $_GET['quan'];
+        $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
+        $result = $conn->query($query);
+        $data_array = $result->fetch_assoc();
+    session_start();
+            //echo "HELLO THERE";
+        if($_POST['theSubmitButton']){
+            //echo "WHTA IS GOING ONE";
+            $_SESSION['curOrderID'] = $data_array['maxVal'] + 1;
+            //echo $_SESSION['curOrderID'];
+        }
+        if (isset($_POST['check'])) {
+		    //echo "<br>ISSET POST ";
+            $orderID = $_SESSION['curOrderID'];
+		    echo  $_SESSION['curOrderID'];
+		    $check = $_POST['check'];
+			$quan = $_POST['quan'];
 
 		    $curTime = time();
 		    $dateNum = date("Ymd");
@@ -225,15 +181,77 @@
                     echo "NOT SUCCESSFUL INSERT";
                 }*/
             } 
-            
 		} else {
 			//echo "You did not choose any items.";
 		}
 	}  
-    
+    //unset($_SESSION['stuffChecked']);
     $conn->close()
     ?>
     </div>
+        <div class="search-table-outter" style="min-width: 800px;padding: 2em;"> 
+            <b>
+                 <big style="font-size=50px;">Current Items In Order</big>
+            </b>
+            <?php
+            include('passwords.php');
+            global $USERNAME;
+            global $PASSWORD;
+
+            $servername = "mysql.eecs.ku.edu";
+            $username = $USERNAME;
+            $password = $PASSWORD;
+            $dbname = "$USERNAME";
+            session_start();
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            //echo $_SESSION['UID'];
+            if($_POST['theSubmitButton']){
+                exit;
+            }
+                $query = "SELECT MAX(OrderID) AS maxVal FROM MyOrder";
+                $result = $conn->query($query);
+                $data_array = $result->fetch_assoc();
+                $orderID = $data_array['maxVal'];
+
+                $query = "SELECT ItemID, LocationID, Quantity FROM Order_Has_Item WHERE OrderID = $orderID";
+                $result = $conn->query($query);
+
+                echo "<div align='center'>
+                    <table class='styled-table box'><tr>";
+
+                for($i = 0; $i < mysqli_num_fields($result); $i++) {
+                        $field_info = mysqli_fetch_field($result);
+                        echo "<th>$field_info->name</th>";
+                }
+                echo "</tr>";
+                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                    echo "<tr>";
+                    foreach($line as $col_value){
+                        echo "<td>$col_value</td>";
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>
+                    </div>";
+		    $result = $conn->query($query) or die(mysqli_error());
+
+            $conn->close()
+
+        /*session_start();*/
+        ?>
+
+        <form method='post' >
+          <!-- <div align='left' class='checkboxes'>
+            <label><input name='submitBox' style='width: 10px;' type='checkbox'> 
+    <span><i> &nbsp;&nbsp;
+            I understand that I cannot delete the order after submitting. </i></span></label>
+          </div> <br> -->
+          <input type="submit" name='theSubmitButton' value="Create New Order">
+        </form>
+    </div> 
+
+
+
     <div class="bottom-row">
         <br><br>
         <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>

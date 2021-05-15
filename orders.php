@@ -176,6 +176,7 @@
          foreach ($checks as $ID){
             $sql = "UPDATE MyOrder SET DriverID = $myid
                  WHERE OrderID = $ID";
+
             $worked = $conn->query($sql);
                 
             //echo "<script src=/text/javascript>location.reload()</script>";
