@@ -215,7 +215,7 @@
                 $data_array = $result->fetch_assoc();
                 $orderID = $data_array['maxVal'];
 
-                $query = "SELECT Item.Name, Location.Name, Order_Has_Item.Quantity FROM Order_Has_Item, Item, Location WHERE OrderID = $orderID AND Item.ItemID = Order_Has_Item.ItemID AND Location.LocationID = Order_Has_Item.LocationID";
+                $query = "SELECT Item.Name ItemName, Location.Name LocationName, Order_Has_Item.Quantity FROM Order_Has_Item, Item, Location WHERE OrderID = $orderID AND Item.ItemID = Order_Has_Item.ItemID AND Location.LocationID = Order_Has_Item.LocationID";
                 $result = $conn->query($query);
 
                 echo "<br><br><b>Current Order-ID of order: " . strval($_SESSION['curOrderID']) . "</b>";
