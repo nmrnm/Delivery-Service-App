@@ -1,11 +1,37 @@
+
+
 .search-table-outter { overflow-x: auto; }
 td { max-width: 100px; }
 /*th { max-width: 100px; }*/
 
-body, html {
+/*body, html {
   position: relative;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 20px;
   margin-top: 20px;
+}*/
+body {
+    margin: 0;
+    padding: 0;
 }
+
+
+form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.checkboxes label {
+  display: inline-block;
+  padding-right: 10px;
+  white-space: nowrap;
+}
+.checkboxes input {
+  vertical-align: middle;
+}
+.checkboxes label span {
+  vertical-align: middle;
+}
+

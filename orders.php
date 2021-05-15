@@ -155,7 +155,7 @@
                 $sql = "UPDATE MyOrder SET Time_End = $cur_time
                  WHERE OrderID = $ID";
                 $worked = $conn->query($sql);
-                header("Location:orders.php");
+                /*header("Location:orders.php");*/
                 exit;
                 
                 //echo "<script src=/text/javascript>location.reload()</script>";
@@ -201,7 +201,7 @@
                 $sql = "UPDATE MyOrder SET DriverID = $myid
                  WHERE OrderID = $ID ";
                 $worked = $conn->query($sql);
-                header("Location:orders.php");
+                /*header("Location:orders.php");*/
                 exit;
                 
                 //echo "<script src=/text/javascript>location.reload()</script>";
