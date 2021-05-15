@@ -150,7 +150,7 @@
         if($_POST['theSubmitButton']){
             //echo "WHTA IS GOING ONE";
             $_SESSION['curOrderID'] = $maxVal + 1;
-            echo "INCREMENT BECAUSE SUBMIT";
+            //echo "INCREMENT BECAUSE SUBMIT";
             //echo $_SESSION['curOrderID'];
         }
         if (isset($_POST['check'])) {
@@ -161,18 +161,18 @@
             $result = $conn->query($query);
             $data_array = $result->fetch_assoc();
 
-            echo "<br>";
-            echo $_SESSION['UID'];
-            echo "USERS";
-            echo $data_array['UserID'];
+            //echo "<br>";
+            //echo $_SESSION['UID'];
+            //echo "USERS";
+            //echo $data_array['UserID'];
 
             //check if same or different user
             if($data_array['UserID'] != $_SESSION['UID']){
                 $_SESSION['curOrderID'] = $maxVal + 1;
-                echo "INCREMENT BECAUSE USER";
+                //echo "INCREMENT BECAUSE USER";
             }
 
-		    echo  $_SESSION['curOrderID'];
+		    //echo  $_SESSION['curOrderID'];
 		    $check = $_POST['check'];
 			$quan = $_POST['quan'];
 
@@ -187,11 +187,11 @@
 		    VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
 
 		    $worked = $conn->query($sql);
-		    if($worked === TRUE){
-		        echo "WORKED ";
-		    }else{
-		        echo "NOT WORKED ";
-		    }
+		    //if($worked === TRUE){
+		        //echo "WORKED ";
+		    //}else{
+		        //echo "NOT WORKED ";
+		    //}
 
 		
 			foreach ($check as $box){
@@ -204,11 +204,11 @@
          		   VALUES($orderID, $itemID, $locID, $quantity)";
                 $worked = $conn->query($sql);
 
-                if($worked === TRUE){
-                    echo "SUCCESSFUL INSERT";
-                }else {
-                    echo "NOT SUCCESSFUL INSERT";
-                }
+                //if($worked === TRUE){
+                    //echo "SUCCESSFUL INSERT";
+                //}else {
+                    //echo "NOT SUCCESSFUL INSERT";
+                //}
             } 
 		} else {
 			//echo "You did not choose any items.";
@@ -234,22 +234,22 @@
             session_start();
             $conn = new mysqli($servername, $username, $password, $dbname);
             if($_POST['theSubmitButton']){
-                echo "POST BUTTON";
+                //echo "POST BUTTON";
                 exit;
             }
                 
                 $query = "SELECT MAX(T.OrderID) AS maxVal FROM (SELECT * FROM MyOrder WHERE UserID = " . strval($_SESSION['UID']) . ") AS T";
-                echo $query;
+                //echo $query;
                 $result = $conn->query($query);
-                echo "<br>";
-                echo $_SESSION['curOrderID'];
-                echo "BREAK";
+                //echo "<br>";
+                //echo $_SESSION['curOrderID'];
+                //echo "BREAK";
                 $data_array = $result->fetch_assoc();
-                echo $data_array['maxVal'];
+                //echo $data_array['maxVal'];
                 $orderID = $data_array['maxVal'];
 
                 if(mysqli_num_rows($result) == 0){
-                    echo "RESULT EMPTY EXIT";
+                    //echo "RESULT EMPTY EXIT";
                     exit; 
                 }
 
