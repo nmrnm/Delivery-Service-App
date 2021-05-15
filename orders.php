@@ -186,7 +186,7 @@
                 echo "NOT WORKED " ;
             }*/
    		}
-           	header("Location:orders.php");
+           	//header("Location:orders.php");
             //exit;
        }
             
@@ -238,10 +238,12 @@
                     echo "NOT WORKED " ;
                 }*/
            }
-           	header("Location:orders.php");
+           	//header("Location:orders.php");
             //exit;
        }
-       
+        if(isset($_POST['checks']) or isset($_POST['checkAcceptedDelivery']) ){
+           	header("Location:orders.php");
+        }
    		//Finished
         echo "<br> <br> These are finished orders that you have already completed: ";
        $sql = "SELECT OrderID, Username, Start_Date, Time_Start, Time_End FROM MyOrder, Customer WHERE DriverID = $myid AND Time_End IS NOT NULL AND Customer.UserID = MyOrder.UserID";

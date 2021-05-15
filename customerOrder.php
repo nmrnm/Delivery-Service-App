@@ -143,7 +143,7 @@
         if (isset($_POST['check'])) {
 		    //echo "<br>ISSET POST ";
             $orderID = $_SESSION['curOrderID'];
-		    echo  $_SESSION['curOrderID'];
+		    //echo  $_SESSION['curOrderID'];
 		    $check = $_POST['check'];
 			$quan = $_POST['quan'];
 
@@ -204,7 +204,6 @@
             $dbname = "$USERNAME";
             session_start();
             $conn = new mysqli($servername, $username, $password, $dbname);
-            //echo $_SESSION['UID'];
             if($_POST['theSubmitButton']){
                 exit;
             }
@@ -216,6 +215,7 @@
                 $query = "SELECT ItemID, LocationID, Quantity FROM Order_Has_Item WHERE OrderID = $orderID";
                 $result = $conn->query($query);
 
+                echo "<br><br><b>Current Order-ID of order: " . strval($_SESSION['curOrderID']) . "</b>";
                 echo "<div align='center'>
                     <table class='styled-table box'><tr>";
 
