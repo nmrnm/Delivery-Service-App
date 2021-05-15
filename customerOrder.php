@@ -39,13 +39,19 @@
     </head>
 
     <body class = "bg">
-
+    <div class="bottom-row">
+        <br><br>
+        <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
+        <br> <br> 
+        <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
+    </div>
     <div style="min-width: 800px;padding: 2em;">
        <form method="get">
           Search by Item Name:  <br> <br>
           <input name="search" type="text"/>
           <input type="submit" value="Search">
         </form>
+
 
     <?php
     include('passwords.php');
@@ -253,14 +259,6 @@
         </form>
     </div> 
 
-
-
-    <div class="bottom-row">
-        <br><br>
-        <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
-        <br> <br> 
-        <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
-    </div>
         <script>
          function popMoreDetails() {
              console.log("DEBUG popmoredetails");
