@@ -24,7 +24,7 @@
 
 .user_field {
     margin: auto;
-    display: block
+    display: block;
 }
 
 .header {
@@ -107,6 +107,5 @@ input {
     width: 100%;
     box-sizing: border-box;
 }
-
 
 
