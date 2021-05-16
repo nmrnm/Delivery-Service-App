@@ -4,54 +4,15 @@
         <link rel="stylesheet" type="text/css" href="popup.css"/>
         <link rel="stylesheet" type="text/css" href="tablescroll.css"/>
 <!-- https://stackoverflow.com/questions/62051806/how-to-use-div-to-layout-a-nav-bar-two-column-div-and-a-bottom-div -->
-       <style>
-       body {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto 1fr auto;
-          grid-template-areas: "nav nav" "column1 column2" "bottom-row bottom-row";
-          width: 100%;
-          height: 100%;
-          margin: 0;
-        }
-
-        nav {
-          grid-area: nav;
-          align-self: center;
-        }
-
-        .column1 {
-          grid-area: column1;
-          /*width: 75%;*/
-        }
-
-        .column2 {
-          grid-area: column2;
-          
-          /*width: 50%;*/
-        }
-
-        .bottom-row {
-          grid-area: bottom-row;
-          justify-self: center;
-        }
-        </style>
     </head>
 
     <body class = "bg">
-    <div class="bottom-row">
-        <br><br>
-        <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
-        <br> <br> 
-        <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
-    </div>
-    <div style="min-width: 800px;padding: 2em;">
+    <div style="padding: 2em;" >
        <form method="get">
           Search by Item Name:  <br> <br>
           <input name="search" type="text"/>
           <input type="submit" value="Search">
         </form>
-
 
     <?php
     include('passwords.php');
@@ -93,7 +54,7 @@
 		        </div> "; 
 		echo "<div align='center'>
         <form action='customerOrder.php' method='post'> 
-       <div class='search-table-outter' >
+       <div >
         <table class='styled-table'><tr>";
         for($i = 0; $i < mysqli_num_fields($result); $i++) {
             $field_info = mysqli_fetch_field($result);
@@ -143,46 +104,17 @@
         $result = $conn->query($query);
         $data_array = $result->fetch_assoc();
 
-        $maxVal = $data_array['maxVal'];
-
-    session_start();
-            //echo "HELLO THERE";
-        if($_POST['theSubmitButton']){
-            //echo "WHTA IS GOING ONE";
-            $_SESSION['curOrderID'] = $maxVal + 1;
-            //echo "INCREMENT BECAUSE SUBMIT";
-            //echo $_SESSION['curOrderID'];
-        }
+        session_start();
         if (isset($_POST['check'])) {
-		    //echo "<br>ISSET POST ";
-            $orderID = $_SESSION['curOrderID'];
+            $orderID = $data_array['maxVal'] + 1;
 
-            $query = "SELECT UserID FROM MyOrder WHERE OrderID = (SELECT MAX(OrderID) FROM MyOrder)";
-            $result = $conn->query($query);
-            $data_array = $result->fetch_assoc();
-
-            //echo "<br>";
-            //echo $_SESSION['UID'];
-            //echo "USERS";
-            //echo $data_array['UserID'];
-
-            //check if same or different user
-            if($data_array['UserID'] != $_SESSION['UID']){
-                $_SESSION['curOrderID'] = $maxVal + 1;
-                //echo "INCREMENT BECAUSE USER";
-            }
-
-		    //echo  $_SESSION['curOrderID'];
 		    $check = $_POST['check'];
 			$quan = $_POST['quan'];
 
 		    $curTime = time();
 		    $dateNum = date("Ymd");
 		    $userID = $_SESSION['UID'];
-		    //echo "THIS IS YOUR UID: " . strval($userID);
-		    //echo strval($dateNum);
-		    //echo "<br>" ;
-		    //echo strval($curTime);
+
 		    $sql = "INSERT INTO MyOrder(OrderID, DriverID, UserID, Start_Date, Time_Start, Time_End, Delivery_Cost)
 		    VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
 
@@ -193,7 +125,6 @@
 		        //echo "NOT WORKED ";
 		    //}
 
-		
 			foreach ($check as $box){
 				$vars = explode("_", $box); // split string 
 				$locID = $vars[0];
@@ -217,78 +148,13 @@
     //unset($_SESSION['stuffChecked']);
     $conn->close()
     ?>
+
+    <div class="bottom-row">
+        <br><br>
+        <button align="left" class="bigButton" onclick="location.href='orders.php'">Back</button>
+        <br> <br> 
+        <button align="left" class="bigButton" onclick="location.href='index.php'">Back to Home</button>
     </div>
-        <div class="search-table-outter" style="min-width: 800px;padding: 2em;"> 
-            <b>
-                 <big style="font-size=50px;">Current Items In Order</big>
-            </b>
-            <?php
-            include('passwords.php');
-            global $USERNAME;
-            global $PASSWORD;
-
-            $servername = "mysql.eecs.ku.edu";
-            $username = $USERNAME;
-            $password = $PASSWORD;
-            $dbname = "$USERNAME";
-            session_start();
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            if($_POST['theSubmitButton']){
-                //echo "POST BUTTON";
-                exit;
-            }
-                
-                $query = "SELECT MAX(T.OrderID) AS maxVal FROM (SELECT * FROM MyOrder WHERE UserID = " . strval($_SESSION['UID']) . ") AS T";
-                //echo $query;
-                $result = $conn->query($query);
-                //echo "<br>";
-                //echo $_SESSION['curOrderID'];
-                //echo "BREAK";
-                $data_array = $result->fetch_assoc();
-                //echo $data_array['maxVal'];
-                $orderID = $data_array['maxVal'];
-
-                if(mysqli_num_rows($result) == 0){
-                    //echo "RESULT EMPTY EXIT";
-                    exit; 
-                }
-
-                $query = "SELECT Item.Name ItemName, Location.Name LocationName, Order_Has_Item.Quantity FROM Order_Has_Item, Item, Location WHERE OrderID = $orderID AND Item.ItemID = Order_Has_Item.ItemID AND Location.LocationID = Order_Has_Item.LocationID";
-                $result = $conn->query($query);
-
-                echo "<br><br><b>Current Order-ID of order: " . strval($_SESSION['curOrderID']) . "</b>";
-                echo "<div align='center'>
-                    <table class='styled-table box'><tr>";
-
-                for($i = 0; $i < mysqli_num_fields($result); $i++) {
-                        $field_info = mysqli_fetch_field($result);
-                        echo "<th>$field_info->name</th>";
-                }
-                echo "</tr>";
-                while($line = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                    echo "<tr>";
-                    foreach($line as $col_value){
-                        echo "<td>$col_value</td>";
-                    }
-                    echo "</tr>";
-                }
-                echo "</table>
-                    </div>";
-		    $result = $conn->query($query) or die(mysqli_error());
-
-            $conn->close()
-
-        /*session_start();*/
-        ?>
-
-        <form method='post' >
-          <!-- <div align='left' class='checkboxes'>
-            <label><input name='submitBox' style='width: 10px;' type='checkbox'> 
-    <span><i> &nbsp;&nbsp;
-            I understand that I cannot delete the order after submitting. </i></span></label>
-          </div> <br> -->
-          <input type="submit" name='theSubmitButton' value="Create New Order">
-        </form>
     </div> 
 
         <script>
