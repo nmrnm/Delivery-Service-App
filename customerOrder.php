@@ -119,11 +119,12 @@
 		    VALUES($orderID, NULL, $userID, $dateNum, $curTime, NULL, NULL)";
 
 		    $worked = $conn->query($sql);
-		    //if($worked === TRUE){
-		        //echo "WORKED ";
-		    //}else{
-		        //echo "NOT WORKED ";
-		    //}
+
+		    /*if($worked === TRUE){
+		        echo "WORKED ";
+		    }else{
+		        echo "NOT WORKED ";
+            }*/
 
 			foreach ($check as $box){
 				$vars = explode("_", $box); // split string 
@@ -135,12 +136,15 @@
          		   VALUES($orderID, $itemID, $locID, $quantity)";
                 $worked = $conn->query($sql);
 
-                //if($worked === TRUE){
-                    //echo "SUCCESSFUL INSERT";
-                //}else {
-                    //echo "NOT SUCCESSFUL INSERT";
-                //}
+                /*if($worked === TRUE){
+                    echo "SUCCESSFUL INSERT";
+                }else {
+                    echo "NOT SUCCESSFUL INSERT";
+                }*/
             } 
+
+            header("Location:orders.php");
+
 		} else {
 			//echo "You did not choose any items.";
 		}
